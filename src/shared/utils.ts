@@ -3,3 +3,7 @@ export function formatNumber(n: number, minimumFractionDigits: number, maximumFr
 
   return n.toLocaleString(undefined, {minimumFractionDigits, maximumFractionDigits});
 }
+
+export function getExponentialValue(base: number, growth: number, growthCount: number) {
+  return base * Math.pow(growth, growthCount);
+}

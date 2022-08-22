@@ -1,6 +1,6 @@
 import upgrades from "../config/upgrades";
-import { Upgrades } from "../shared/types";
-import { formatNumber } from "../shared/utils";
+import { Upgrade, Upgrades } from "../shared/types";
+import { formatNumber, getExponentialValue } from "../shared/utils";
 
 const template = document.getElementById('upgrade-template') as HTMLTemplateElement;
 
@@ -29,11 +29,16 @@ class Stats {
       ele.querySelector('.upgrade-name').innerHTML = up.name;
       ele.querySelector('.upgrade-description').innerHTML = 
         up.description.replace('{{bonusPercent}}', formatNumber(up.bonus * 100, 0, 0) + '%');
-      ele.querySelector('.upgrade-purchase-button').innerHTML = `${up.baseCost} Matter`;
+      const purchase = ele.querySelector('.upgrade-purchase-button');
+      purchase.innerHTML = `${up.baseCost} Matter`;
+      purchase.addEventListener('click', () => {
+        this.onUpgrade(up);
+      });
       upgradeList.appendChild(ele);
 
+      const upgradeElements = upgradeList.querySelectorAll('.upgrade');
       this.upgrades[up.id] = {
-        ele: ele,
+        ele: upgradeElements.item(upgradeElements.length-1) as HTMLElement,
         cost: up.baseCost,
         count: 0,
       };
@@ -52,6 +57,17 @@ class Stats {
   useMatter(matter: number) {
     this.matter -= matter;
     this.matterChanged = true;
+  }
+
+  onUpgrade(upgrade: Upgrade) {
+    const upgradeState = this.upgrades[upgrade.id];
+    if (this.canAfford(upgradeState.cost)) {
+      this.useMatter(upgradeState.cost);
+      upgradeState.cost = getExponentialValue(upgrade.baseCost, upgrade.growth, upgradeState.count);
+      upgradeState.count += 1;
+      const costStr = formatNumber(upgradeState.cost, 0, 0);
+      upgradeState.ele.querySelector('.upgrade-purchase-button').innerHTML = costStr + ' Matter';
+    }
   }
 
   update() {

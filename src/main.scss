@@ -3,8 +3,7 @@ html, body {
   background-color: black;
   height: 100%;
   color: white;
-  font-size: 22px;
-  font-family: 'Alumni Sans Pinstripe', sans-serif;
+  font-family: 'Rubik', sans-serif;
 }
 
 body {
@@ -13,7 +12,7 @@ body {
 }
 
 header {
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #AAA;
   padding: 10px;
 
   h1 {
@@ -46,7 +45,6 @@ header {
       display: flex;
       flex-direction: row;
       grid-gap: 10px;
-      align-items: center;
 
       img {
         width: 20px;
@@ -58,6 +56,7 @@ header {
   h2 {
     font-size: 1.25rem;
     color: #999;
+    margin-top: 30px;
     margin-bottom: 10px;
   }
 
@@ -68,11 +67,15 @@ header {
   }
 
   .upgrade {
+    .upgrade-name {
+      margin-bottom: 4px;
+    }
+
     .upgrade-description {
       padding: 0 4px;
-      font-size: 19px;
-      color: #DDD;
-      margin-bottom: 10px;
+      color: #CCC;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
     }
 
     .upgrade-purchase-button {
