@@ -3,11 +3,15 @@ import Stats from "../stats/stats";
 import Factory from "./factory";
 import NanoBot from "./nanobot";
 
+const WIDTH = 1000;
+const HEIGHT = 1000;
+
 class Field {
   stage: Stage;
   stats: Stats;
   factories: Factory[];
   nanobots: NanoBot[];
+  bits: boolean[];
 
   fieldDisplay: Shape;
 
@@ -16,6 +20,7 @@ class Field {
     this.stats = stats;
     this.factories = [];
     this.nanobots = [];
+    this.bits = [];
 
     stage.addEventListener('click', (evt: MouseEvent) => {
       const newFactory = new Factory(Math.round(evt.stageX), Math.round(evt.stageY), this.spawnBot.bind(this));
@@ -25,7 +30,7 @@ class Field {
     });
 
     const avgColor = [150, 0, 0, 255];
-    const fieldImage = new ImageData(1000, 1000);
+    const fieldImage = new ImageData(WIDTH, HEIGHT);
     for (let p = 0; p < fieldImage.width*fieldImage.height; ++p) {
       const c = p * 4;
       const newBrightness = 1 + (Math.random() * 0.3) - 0.15;
@@ -33,6 +38,8 @@ class Field {
       fieldImage.data[c+1] = avgColor[1] * newBrightness; 
       fieldImage.data[c+2] = avgColor[2] * newBrightness; 
       fieldImage.data[c+3] = avgColor[3];
+
+      this.bits.push(true);
     }
     const fieldCanvas = document.createElement('canvas');
     fieldCanvas.getContext('2d').putImageData(fieldImage, 0, 0);
@@ -40,24 +47,50 @@ class Field {
     this.fieldDisplay = new Shape();
     this.fieldDisplay.graphics
       .beginBitmapFill(fieldCanvas)
-      .drawRect(0, 0, fieldImage.width, fieldImage.height);
-    this.fieldDisplay.cache(0, 0, 1000, 1000);
+      .drawRect(0, 0, WIDTH, HEIGHT);
+    this.fieldDisplay.cache(0, 0, WIDTH, HEIGHT);
     stage.addChild(this.fieldDisplay);
   }
 
   update(delta: number) {
     this.factories.forEach(f => f.update(delta));
-    this.nanobots.forEach(n => n.update(delta));
+    this.nanobots = this.nanobots.filter(n => {
+      n.update(delta);
+      
+      if (!n.isEating) {
+        const bi = this.getBitIndex(n.display.x, n.display.y);
+        if (this.bits[bi]) {
+          n.stopAndEat();
+        }
+      }
+
+      if (n.lifeTimeLeft <= 0) {
+        this.stage.removeChild(n.display);
+        return false;
+      }
+      return true;
+    });
   }
 
-  claimBits(x: number, y: number, width: number, height: number) {
-    this.fieldDisplay.graphics.beginFill('black').drawRect(x, y, width, height);
-    this.stats.gainBits(width * height);
+  claimMatter(x: number, y: number) {
+    this.fieldDisplay.graphics.beginFill('black').drawRect(x, y, 1, 1);
+    this.fieldDisplay.cache(0, 0, WIDTH, HEIGHT);
+    this.stats.gainMatter(1);
+    this.bits[this.getBitIndex(x, y)] = false;
   }
 
-  spawnBot(bot: NanoBot) {
+  onEatMatter(bot: NanoBot) {
+    this.claimMatter(bot.display.x, bot.display.y);
+  }
+
+  spawnBot(x: number, y: number) {
+    const bot = new NanoBot(x, y, this.onEatMatter.bind(this));
     this.nanobots.push(bot);
-    this.stage.addChild(bot.getDisplay());
+    this.stage.addChild(bot.display);
+  }
+
+  getBitIndex(x: number, y: number) {
+    return Math.floor(x) + Math.floor(y) * WIDTH;
   }
 }
 

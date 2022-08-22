@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve"
+    "start": "cross-env NODE_ENV=development webpack serve",
+    "clean-dist": "rimraf dist/*",
+    "build": "npm run clean-dist && cross-env NODE_ENV=production webpack",
+    "deploy": "gh-pages -d dist"
   },
   "author": "",
   "license": "ISC",
@@ -13,8 +16,10 @@
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
+    "rimraf": "^3.0.2",
     "sass": "^1.54.5",
     "sass-loader": "^13.0.2",
     "ts-loader": "^9.3.1",
@@ -25,6 +30,8 @@
   },
   "dependencies": {
     "@types/createjs": "^0.0.29",
-    "createjs-module": "^0.8.3"
+    "@types/victor": "^1.1.0",
+    "createjs-module": "^0.8.3",
+    "victor": "^1.1.0"
   }
 }

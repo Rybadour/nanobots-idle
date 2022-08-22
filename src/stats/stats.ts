@@ -1,19 +1,19 @@
 import { formatNumber } from "../shared/utils";
 
 class Stats {
-  bitsEle: HTMLElement;
-  bits: number = 100;
+  matterEle: HTMLElement;
+  matter: number = 100;
 
   constructor(menu: HTMLElement) {
-    this.bitsEle = menu.querySelector('.bits-count');
+    this.matterEle = menu.querySelector('.bits-count');
   }
 
-  gainBits(newBits: number) {
-    this.bits += newBits;
+  gainMatter(newMatter: number) {
+    this.matter += newMatter;
   }
 
   update() {
-    this.bitsEle.innerText = formatNumber(this.bits, 0, 0);
+    this.matterEle.innerText = formatNumber(this.matter, 0, 0);
   }
 }
 

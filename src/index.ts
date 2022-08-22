@@ -8,6 +8,8 @@ const stage = new createjs.Stage("main-canvas");
 stage.scaleX = 1;
 stage.scaleY = 1;
 
+(document.getElementById('main-canvas') as HTMLCanvasElement).getContext('2d').imageSmoothingEnabled = true;
+
 const menuEle = document.getElementById('menu');
 const stats = new Stats(menuEle);
 
