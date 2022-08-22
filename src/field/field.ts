@@ -6,6 +6,8 @@ import NanoBot from "./nanobot";
 const WIDTH = 1000;
 const HEIGHT = 1000;
 
+const FACTORY_COST = 1000;
+
 class Field {
   stage: Stage;
   stats: Stats;
@@ -23,6 +25,12 @@ class Field {
     this.bits = [];
 
     stage.addEventListener('click', (evt: MouseEvent) => {
+      if (!this.stats.canAfford(FACTORY_COST)) {
+        return;
+      }
+
+      this.stats.useMatter(FACTORY_COST);
+
       const newFactory = new Factory(Math.round(evt.stageX), Math.round(evt.stageY), this.spawnBot.bind(this));
       this.factories.push(newFactory);
 
