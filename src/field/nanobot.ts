@@ -2,7 +2,7 @@ import { Point, Shape } from "createjs-module";
 import { Bonuses } from "shared/types";
 import Victor from "victor";
 
-const SPEED = 1;
+const SPEED = 4;
 const LIFE_TIME = 5;
 const EAT_TIME = 1;
 

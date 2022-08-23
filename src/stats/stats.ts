@@ -70,8 +70,8 @@ class Stats {
     const upgradeState = this.upgrades[upgrade.id];
     if (this.canAfford(upgradeState.cost)) {
       this.useMatter(upgradeState.cost);
-      upgradeState.cost = getExponentialValue(upgrade.baseCost, upgrade.growth, upgradeState.count);
       upgradeState.count += 1;
+      upgradeState.cost = getExponentialValue(upgrade.baseCost, upgrade.growth, upgradeState.count);
 
       const costStr = formatNumber(upgradeState.cost, 0, 0);
       upgradeState.ele.querySelector('.upgrade-purchase-button').innerHTML = costStr + ' Matter';

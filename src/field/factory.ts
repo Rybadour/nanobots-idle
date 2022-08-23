@@ -4,7 +4,7 @@ import Field from "./field";
 import { FieldPosition } from "./field-position";
 import NanoBot from "./nanobot";
 
-const SPAWN_RATE = 2;
+const SPAWN_RATE = 4;
 
 class Factory {
   display: Shape;
