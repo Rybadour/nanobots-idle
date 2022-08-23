@@ -1,9 +1,10 @@
 import { Point, Shape } from "createjs-module";
+import { Bonuses } from "shared/types";
 import Victor from "victor";
 
-const SPEED = 3;
-const LIFE_TIME = 10;
-const EAT_TIME = 0.5;
+const SPEED = 1;
+const LIFE_TIME = 5;
+const EAT_TIME = 1;
 
 class NanoBot {
   onDoneEating: (bot: NanoBot) => void;
@@ -39,20 +40,21 @@ class NanoBot {
     this.onDoneEating(this);
   }
 
-  update(delta: number) {
-    this.lifeTimeLeft -= delta;
+  update(delta: number, bonuses: Bonuses) {
+    this.lifeTimeLeft -= delta / bonuses.botLifeTime;
 
     if (this.isEating) {
       if (this.eatTimeLeft > 0) {
-        this.eatTimeLeft -= delta;
+        this.eatTimeLeft -= delta * bonuses.botEatSpeed;
       } else {
         this.stopEating();
       }
       return;
     }
 
-    this.display.x += this.velocity.x * delta;
-    this.display.y += this.velocity.y * delta;
+    const speedFactor = delta * bonuses.botSpeed;
+    this.display.x += this.velocity.x * speedFactor;
+    this.display.y += this.velocity.y * speedFactor;
   }
 }
 

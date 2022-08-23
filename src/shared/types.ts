@@ -1,4 +1,4 @@
-export interface Upgrades {
+export interface Bonuses {
   botLifeTime: number,
   botSpeed: number,
   botEatSpeed: number,
@@ -11,5 +11,6 @@ export interface Upgrade {
   description: string,
   baseCost: number,
   growth: number,
+  bonusKey: keyof Bonuses,
   bonus: number, 
 }

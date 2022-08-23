@@ -61,9 +61,10 @@ class Field {
   }
 
   update(delta: number) {
-    this.factories.forEach(f => f.update(delta));
+    this.factories.forEach(f => f.update(delta, this.stats.bonuses));
+
     this.nanobots = this.nanobots.filter(n => {
-      n.update(delta);
+      n.update(delta, this.stats.bonuses);
       
       if (!n.isEating) {
         const bi = this.getBitIndex(n.display.x, n.display.y);

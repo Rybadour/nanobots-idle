@@ -1,4 +1,5 @@
 import { Shape } from "createjs-module";
+import { Bonuses } from "shared/types";
 import Field from "./field";
 import { FieldPosition } from "./field-position";
 import NanoBot from "./nanobot";
@@ -24,9 +25,9 @@ class Factory {
     return this.display;
   }
 
-  update(delta: number) {
+  update(delta: number, bonuses: Bonuses) {
     if (this.nextSpawn > 0) {
-      this.nextSpawn -= delta;
+      this.nextSpawn -= delta * bonuses.factorySpawnRate;
       return;
     }
 

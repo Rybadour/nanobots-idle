@@ -1,5 +1,5 @@
 import upgrades from "../config/upgrades";
-import { Upgrade, Upgrades } from "../shared/types";
+import { Upgrade, Bonuses } from "../shared/types";
 import { formatNumber, getExponentialValue } from "../shared/utils";
 
 const template = document.getElementById('upgrade-template') as HTMLTemplateElement;
@@ -15,13 +15,20 @@ class Stats {
     count: number,
   }>;
 
-  upgradeBonus: Upgrades;
+  bonuses: Bonuses;
 
   constructor(menu: HTMLElement) {
     this.matterEle = menu.querySelector('.matter-count');
     this.matterChanged = true;
 
     this.upgrades = {};
+
+    this.bonuses = {
+      botEatSpeed: 1,
+      botLifeTime: 1,
+      botSpeed: 1,
+      factorySpawnRate: 1,
+    };
 
     const upgradeList = menu.querySelector('.upgrade-list');
     Object.values(upgrades).forEach(up => {
@@ -65,8 +72,11 @@ class Stats {
       this.useMatter(upgradeState.cost);
       upgradeState.cost = getExponentialValue(upgrade.baseCost, upgrade.growth, upgradeState.count);
       upgradeState.count += 1;
+
       const costStr = formatNumber(upgradeState.cost, 0, 0);
       upgradeState.ele.querySelector('.upgrade-purchase-button').innerHTML = costStr + ' Matter';
+
+      this.bonuses[upgrade.bonusKey] += upgrade.bonus;
     }
   }
 
