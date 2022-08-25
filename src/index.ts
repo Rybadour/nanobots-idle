@@ -1,8 +1,12 @@
 import './main.scss';
-import createjs, { MouseEvent, Ticker, TickerEvent } from "createjs-module";
+import createjs from "createjs-module";
 import Field from './field/field';
 import Stats from './stats/stats';
+import Assets from './assets';
 
+const assets = new Assets(() => {
+  field.assetsLoaded(assets);
+});
 
 const stage = new createjs.Stage("main-canvas");
 stage.scaleX = 1;
@@ -13,10 +17,14 @@ stage.scaleY = 1;
 const menuEle = document.getElementById('menu');
 const stats = new Stats(menuEle);
 
-const field = new Field(stage, stats);
+const field = new Field(stage, stats, assets);
 
-Ticker.framerate = 30;
-Ticker.addEventListener('tick', (evt: TickerEvent) => {
+createjs.Ticker.framerate = 30;
+createjs.Ticker.addEventListener('tick', (evt: createjs.TickerEvent) => {
+  if (!assets.isLoaded) {
+    return;
+  }
+
   const deltaSecs = evt.delta / 1000;
   field.update(deltaSecs);
   stats.update();

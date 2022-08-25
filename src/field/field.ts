@@ -1,4 +1,5 @@
-import { MouseEvent, Shape, Stage } from "createjs-module";
+import Assets from "assets";
+import createjs from "createjs-module";
 import Stats from "../stats/stats";
 import Factory from "./factory";
 import NanoBot from "./nanobot";
@@ -9,32 +10,36 @@ const HEIGHT = 1000;
 const FACTORY_COST = 1000;
 
 class Field {
-  stage: Stage;
+  stage: createjs.Stage;
   stats: Stats;
   factories: Factory[];
   nanobots: NanoBot[];
   bits: boolean[];
 
-  fieldDisplay: Shape;
+  fieldDisplay: createjs.Shape;
 
-  constructor(stage: Stage, stats: Stats) {
+  constructor(stage: createjs.Stage, stats: Stats, assets: Assets) {
     this.stage = stage;
     this.stats = stats;
     this.factories = [];
     this.nanobots = [];
     this.bits = [];
 
-    stage.addEventListener('click', (evt: MouseEvent) => {
+    stage.addEventListener('click', (evt: createjs.MouseEvent) => {
       if (!this.stats.canAfford(FACTORY_COST)) {
         return;
       }
 
       this.stats.useMatter(FACTORY_COST);
 
-      const newFactory = new Factory(Math.round(evt.stageX), Math.round(evt.stageY), this.spawnBot.bind(this));
+      const newFactory = new Factory(
+        Math.round(evt.stageX), Math.round(evt.stageY),
+        assets,
+        this.spawnBot.bind(this)
+      );
       this.factories.push(newFactory);
 
-      stage.addChild(newFactory.getDisplay());
+      stage.addChild(newFactory.display);
     });
 
     const avgColor = [150, 0, 0, 255];
@@ -52,12 +57,16 @@ class Field {
     const fieldCanvas = document.createElement('canvas');
     fieldCanvas.getContext('2d').putImageData(fieldImage, 0, 0);
 
-    this.fieldDisplay = new Shape();
+    this.fieldDisplay = new createjs.Shape();
     this.fieldDisplay.graphics
       .beginBitmapFill(fieldCanvas)
       .drawRect(0, 0, WIDTH, HEIGHT);
     this.fieldDisplay.cache(0, 0, WIDTH, HEIGHT);
     stage.addChild(this.fieldDisplay);
+  }
+
+  assetsLoaded(assets: Assets) {
+
   }
 
   update(delta: number) {

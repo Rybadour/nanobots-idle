@@ -1,4 +1,4 @@
-import { Point, Shape } from "createjs-module";
+import createjs from "createjs-module";
 import { Bonuses } from "shared/types";
 import Victor from "victor";
 
@@ -9,14 +9,14 @@ const EAT_TIME = 1;
 class NanoBot {
   onDoneEating: (bot: NanoBot) => void;
 
-  display: Shape;
+  display: createjs.Shape;
   velocity: Victor;
   lifeTimeLeft: number;
   isEating: boolean;
   eatTimeLeft: number;
 
   constructor(x: number, y: number, onDoneEating: (bot: NanoBot) => void) {
-    this.display = new Shape();
+    this.display = new createjs.Shape();
     this.display.graphics.beginFill('grey').drawRect(0, 0, 1, 1);
     this.display.cache(0, 0, 1, 1);
     this.display.x = x;

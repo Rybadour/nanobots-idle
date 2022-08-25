@@ -6,7 +6,7 @@ const template = document.getElementById('upgrade-template') as HTMLTemplateElem
 
 class Stats {
   matterEle: HTMLElement;
-  matter: number = 1000;
+  matter: number = 5000;
   matterChanged: boolean;
 
   upgrades: Record<string, {

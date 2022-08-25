@@ -31,7 +31,7 @@
   "dependencies": {
     "@types/createjs": "^0.0.29",
     "@types/victor": "^1.1.0",
-    "createjs-module": "^0.8.3",
+    "createjs-module": "github:Rybadour/createjs-module",
     "victor": "^1.1.0"
   }
 }

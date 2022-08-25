@@ -1,28 +1,22 @@
-import { Shape } from "createjs-module";
-import { Bonuses } from "shared/types";
-import Field from "./field";
-import { FieldPosition } from "./field-position";
-import NanoBot from "./nanobot";
+import Assets from "assets";
+import createjs from "createjs-module";
+
+import { Bonuses } from "../shared/types";
+import { centerDisplayOn } from "../shared/utils";
 
 const SPAWN_RATE = 4;
 
 class Factory {
-  display: Shape;
+  display: createjs.DisplayObject;
 
   nextSpawn: number = 0;
   spawnBot: (x: number, y: number) => void;
 
-  constructor(x: number, y: number, spawnBot: (x: number, y: number) => void) {
-    this.display = new Shape();
-    this.display.graphics.beginFill('blue').drawRect(0, 0, 2, 2);
-    this.display.cache(0, 0, 2, 2);
-    this.display.setTransform(x, y);
+  constructor(x: number, y: number, assets: Assets, spawnBot: (x: number, y: number) => void) {
+    this.display = assets.getSprite('nano-core');
+    centerDisplayOn(x, y, this.display);
 
     this.spawnBot = spawnBot;
-  }
-
-  getDisplay() {
-    return this.display;
   }
 
   update(delta: number, bonuses: Bonuses) {
